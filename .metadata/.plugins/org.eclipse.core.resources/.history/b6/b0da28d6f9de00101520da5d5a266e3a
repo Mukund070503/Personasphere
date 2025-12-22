@@ -1,7 +1,0 @@
-spring.application.name=Configserver
-server.port = 8090
-
-
-#config-server properties
-spring.cloud.server.git.uri= https://github.com/Mukund070503/MicroServicesProject1
-spring.cloud.server.git.clone-on-start = true
