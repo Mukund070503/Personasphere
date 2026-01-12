@@ -1,4 +1,4 @@
-package com.personasphere.user.security;
+package com.personasphere.admin.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;

@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
@@ -28,16 +29,29 @@ public class JwtUtil {
 	}
 	
 	public String generateAccessToken(AuthUser user) {
-		return Jwts.builder()
-				.setSubject(user.getUsername())
-				.claim("userId",user.getId())
-				.setIssuedAt(new Date())
-				.setExpiration(new Date(System.currentTimeMillis()+1000*60*10))
-				.signWith(getKey())
-				.compact();
-				
-	}
 
+	    // extract authorities (permissions + roles)
+	    var authorities = user.getAuthorities()
+	            .stream()
+	            .map(GrantedAuthority::getAuthority)
+	            .toList();
+
+	    var roles = user.getRoles()
+	            .stream()
+	            .map(Enum::name)
+	            .toList();
+
+	    return Jwts.builder()
+	            .setSubject(user.getUsername())
+	            .claim("userId", user.getId())
+	            .claim("roles", roles)
+	            .claim("authorities", authorities)
+	            .setIssuedAt(new Date())
+	            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))
+	            .signWith(getKey())
+	            .compact();
+	}
+	
 	public String getUsername(String token) {
 		// TODO Auto-generated method stub
 		Claims claims = Jwts.parser()

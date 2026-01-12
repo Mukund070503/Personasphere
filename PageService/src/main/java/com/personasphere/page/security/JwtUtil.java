@@ -36,6 +36,6 @@ public class JwtUtil {
 
     @SuppressWarnings("unchecked")
     public List<String> getAuthorities(String token) {
-        return (List<String>) getClaims(token).get("permissions");
+        return (List<String>) getClaims(token).get("authorities");
     }
 }
